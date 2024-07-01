@@ -1,11 +1,15 @@
 import React, { useState, FormEvent } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
-import { useNavigate } from "react-router-dom";
-import { API_USER_ENDPOINTS } from "../util/apiConfig";
+import { useLocation, useNavigate } from "react-router-dom";
+import { API_USER_ENDPOINTS } from "../../../util/apiConfig";
+import SubmitButton from "../../common/Button/SubmitButton";
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState<string>("");
+  const location = useLocation();
+  const { restUsername } = location.state || {};
+
+  const [username, setUsername] = useState<string>(restUsername ? restUsername : "");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +17,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   interface error {
-    errors: string | unknown
+    errors: string | unknown;
   }
 
   const handleSubmit = async (e: FormEvent) => {
@@ -32,32 +36,34 @@ const Login: React.FC = () => {
       if (axios.isAxiosError(err) && err.response?.data.errors) {
         setError(err.response.data.errors);
       } else {
-        setError('An unexpected error occurred.');
+        setError("An unexpected error occurred.");
       }
       // setError("Login failed. Please check your credentials.");
-    } finally { 
+    } finally {
       setIsLoading(false);
     }
   };
 
+  const handleSignup = () => {
+    navigate("/register");
+  };
+
   return (
     <form
-      className="bg-indigo-50 w-full h-screen text-slate-600 flex flex-col justify-center"
+      className="bg-lgdark w-full h-screen text-smdark flex flex-col justify-center"
       onSubmit={handleSubmit}
     >
       <div className="bg-white max-w-96 h-screen md:h-auto w-full p-10 mx-auto shadow-xl rounded-lg flex flex-col gap-4 border">
-        <h1 className="text-center text-2xl font-semibold text-indigo-500 mb-4">
-          Login Form
-        </h1>
-        {error &&
-        <section className="bg-red-100 text-red-500 p-2 rounded-md">
-        <p>{error}!</p>
-        </section> 
-        }
+        <h1 className="text-2xl font-semibold mb-4">Sign in to your account</h1>
+        {error && (
+          <section className="bg-red-100 text-red-500 p-2 rounded-md">
+            <p>{error}!</p>
+          </section>
+        )}
         <div className="flex flex-col w-full justify-between gap-2">
           <label className="text-sm">Username</label>
           <input
-            className="border w-full rounded-md h-12 p-2"
+            className="border w-full rounded-md h-12 p-2 bg-lgdark"
             placeholder="username"
             type="text"
             value={username}
@@ -68,7 +74,7 @@ const Login: React.FC = () => {
         <div className="flex flex-col w-full justify-between gap-2">
           <label className="text-sm">Password</label>
           <input
-            className="border w-full rounded-md h-12 p-2"
+            className="border w-full rounded-md h-12 p-2 bg-lgdark"
             placeholder="Password"
             type="password"
             value={password}
@@ -76,15 +82,18 @@ const Login: React.FC = () => {
             required
           />
         </div>
-        
-        
-          <button
-          className="bg-indigo-500 text-white font-semibold rounded-md h-12 my-6"
-          type="submit" disabled={isLoading}
-          >
-          {isLoading ? "Logging in..." : "Login"}
-        </button>
-        
+
+        <SubmitButton
+          isLoading={isLoading}
+          title="Sign in"
+          titleProses="Sign in..."
+        />
+        <p className="text-secondary font-light text-sm text-center">
+          Don’t have an account yet?{" "}
+          <button className="text-main font-semibold" onClick={handleSignup}>
+            Sign up
+          </button>
+        </p>
       </div>
     </form>
   );
