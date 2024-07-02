@@ -16,7 +16,7 @@ const Home: React.FC = () => {
       <section id='home' className='pt-5 md:pt-14'>
         <HeroSection/>
       </section>
-       <section id='about' className='pt-36 pb-32'>
+      <section id='about' className='pt-36 pb-32'>
         <AboutSection/>
       </section>
       <section id='skills' className='pt-36 pb-32'>

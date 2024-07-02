@@ -15,7 +15,8 @@ export default {
         dark: '#0f172a',
         smdark: '#1e293b',
         mddark: '#cbd5e1',
-        lgdark: '#f8fafc',
+        lgdark: '#f1f5f9',
+        xldark: '#f8fafc',
         secondary: '#64748b',
       },
       screens: {

@@ -13,7 +13,7 @@ const SubmitButton: React.FC<buttonType> = ({
 }) => {
   return (
     <button
-      className={`bg-main text-white font-semibold rounded-md h-12 mt-6 ${
+      className={`bg-main text-white font-semibold rounded-md h-12 mt-6 hover:shadow-lg hover:opacity-80 transition duration-300 ease-in-out ${
         isLoading ? "cursor-wait" : ""
       }`}
       type="submit"
