@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../Auth/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Admin: React.FC = () => {
   const { token, logout } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -34,16 +36,19 @@ const Admin: React.FC = () => {
   };
 
   useEffect(() => {
+    if (location.state && location.state.notifFromLogin) {
+      toast.success("Anda berhasil login!");
+    }
     getUser();
-  }, []);
+  }, [location]);
 
   return (
     <section className="bg-lgdark w-full h-screen flex flex-col justify-center ">
       <div className="bg-white shadow-lg rounded-lg max-w-96 w-full h-screen md:h-auto mx-auto text-secondary overflow-hidden">
         <div className="px-6 py-4 border-b text-main">
-        <h1 className="text-xl font-bold">Admin Page</h1>
+          <h1 className="text-xl font-bold">Admin Page</h1>
         </div>
-        
+
         {token ? (
           <div className="flex flex-col gap-6 p-6">
             <div className="">

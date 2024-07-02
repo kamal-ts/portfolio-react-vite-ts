@@ -7,9 +7,11 @@ import SubmitButton from "../../common/Button/SubmitButton";
 
 const Login: React.FC = () => {
   const location = useLocation();
-  const { restUsername } = location.state || {};
+  const { restUsername } = location.state ? location.state : "";
 
-  const [username, setUsername] = useState<string>(restUsername ? restUsername : "");
+  const [username, setUsername] = useState<string>(
+    restUsername ? restUsername : ""
+  );
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +33,7 @@ const Login: React.FC = () => {
       console.log("response", response);
       const token = response.data.data.token;
       login(token);
-      navigate("/admin");
+      navigate("/admin", { state: { notifFromLogin: true } });
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.data.errors) {
         setError(err.response.data.errors);

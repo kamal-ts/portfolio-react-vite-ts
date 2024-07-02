@@ -10,6 +10,9 @@ import Register from "./components/layout/Auth/Register";
 import Home from "./components/layout/Home/Home";
 import Admin from "./components/layout/Admin/Admin";
 import { AuthProvider, useAuth } from "./components/layout/Auth/AuthContext";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import Navbar from "./components/common/Navbar/Navbar";
 
 const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const { token } = useAuth();
@@ -21,6 +24,16 @@ const AfterLogin: React.FC<{ children: JSX.Element }> = ({ children }) => {
   return token ? <Navigate to="/admin" /> : children;
 };
 
+const Layout: React.FC<{ children: JSX.Element }> = ({ children }) => {
+  return (
+    <>
+      <Navbar />
+      {children}
+      <ToastContainer />
+    </>
+  );
+};
+
 const App: React.FC = () => {
   return (
     <AuthProvider>
@@ -29,11 +42,12 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route
             path="/login"
-            element={
+            element={[
               <AfterLogin>
                 <Login />
-              </AfterLogin>
-            }
+              </AfterLogin>,
+              <ToastContainer />,
+            ]}
           />
           <Route
             path="/register"
@@ -47,7 +61,7 @@ const App: React.FC = () => {
             path="/admin"
             element={
               <PrivateRoute>
-                <Admin />
+                <Layout children={<Admin />} />
               </PrivateRoute>
             }
           />
