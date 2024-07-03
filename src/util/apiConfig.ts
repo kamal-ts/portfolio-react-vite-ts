@@ -14,3 +14,4 @@ export const API_USER_ENDPOINTS = {
 export const API_MYPROJECT_ENDPOINTS = {
   CREATE: `${API_BASE_URL}/myprojects`,
 };
+  

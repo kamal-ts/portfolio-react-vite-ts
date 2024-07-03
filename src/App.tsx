@@ -13,7 +13,7 @@ import { AuthProvider, useAuth } from "./components/layout/Auth/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Navbar from "./components/common/Navbar/Navbar";
-import Sidebar from "./components/common/Sidebar/Sidebar";
+// import Sidebar from "./components/common/Sidebar/Sidebar";
 
 const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const { token } = useAuth();
@@ -29,7 +29,7 @@ const Layout: React.FC<{ children: JSX.Element }> = ({ children }) => {
   return (
     <>
       <Navbar />
-      <Sidebar/>
+      
       {children}
       <ToastContainer />
     </>
