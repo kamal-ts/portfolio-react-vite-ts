@@ -1,31 +1,36 @@
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BiSolidDashboard,
   BiSolidData,
   BiSolidLogOutCircle,
 } from "react-icons/bi";
 import {  FaHashtag, FaUserAlt, } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar: React.FC<{status: boolean}> = ({status}) => {
-  
-
-
+  const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState<string | null>("dashboard");
 
-  const handleMenu = (e: SetStateAction<string | null>) => {
-    setActiveMenu(e);
+  interface Menu {
+    title: string | null,
+    icon: JSX.Element | null,
+    link: string | null,
+  }
+  const handleMenu = (e: Menu) => {
+    setActiveMenu(e.title);
+    navigate(`${e.link}`);
   };
 
-  const menu = [
+  const menu: Array<Menu> = [
     {
       title: "dashboard",
       icon: <BiSolidDashboard />,
-      link: "",
+      link: "/admin",
     },
     {
       title: "project",
       icon: <BiSolidData />,
-      link: "",
+      link: "/admin/project",
     },
     {
       title: "tag",
@@ -70,7 +75,7 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
             </div>
             {menu.map((m, index) => (
               <div
-                onClick={() => handleMenu(m.title)}
+                onClick={() => handleMenu(m)}
                 key={index}
                 className={`${
                   activeMenu === m.title ? "bg-xldark text-main" : ""

@@ -13,6 +13,7 @@ import { AuthProvider, useAuth } from "./components/Layout/Auth/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Navbar from "./components/common/Navbar/Navbar";
+import ListProject from "./components/Layout/Project/ListProject";
 // import Sidebar from "./components/common/Sidebar/Sidebar";
 
 const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -63,6 +64,14 @@ const App: React.FC = () => {
             element={
               <PrivateRoute>
                 <Layout children={<Admin />} />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/project"
+            element={
+              <PrivateRoute>
+                <Layout children={<ListProject />} />
               </PrivateRoute>
             }
           />

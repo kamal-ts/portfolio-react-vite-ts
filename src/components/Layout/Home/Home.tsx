@@ -11,7 +11,7 @@ import Footer from './Footer';
 
 const Home: React.FC = () => {
   return (
-    <div>
+    <div className='bg-white'>
       <Header/>
       <section id='home' className='pt-5 md:pt-14'>
         <HeroSection/>

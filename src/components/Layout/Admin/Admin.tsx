@@ -45,7 +45,7 @@ const Admin: React.FC = () => {
 
   return (
     <section
-      className=" absolute top-16 lg:left-72 lg:w-auto w-full h-auto lg:p-4 "
+      className="content"
     >
       <div className="bg-white shadow-lg rounded-sm px-4 py-4 lg:h-auto text-smdark overflow-hidden">
         <div className=" py-4">

@@ -11,7 +11,5 @@ export const API_USER_ENDPOINTS = {
   GET_USER_CURRENT: `${API_BASE_URL}/users/current`,
 };
 
-export const API_MYPROJECT_ENDPOINTS = {
-  CREATE: `${API_BASE_URL}/myprojects`,
-};
+export const API_MYPROJECT_ENDPOINTS = `${API_BASE_URL}/myprojects`
   
