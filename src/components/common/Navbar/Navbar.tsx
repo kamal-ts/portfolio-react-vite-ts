@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { IoChevronDown, IoPerson } from "react-icons/io5";
+import { IoChevronDown } from "react-icons/io5";
 import Sidebar from "../Sidebar/Sidebar";
+import { FaUserCircle } from "react-icons/fa";
 
 const Navbar = () => {
   const [hamburger, setHamburger] = useState(false);
@@ -9,12 +10,12 @@ const Navbar = () => {
     setHamburger(!hamburger);
   };
   return (
-    <header>
+    <header className="">
       <nav
-        className={`w-full h-16 bg-white text-secondary absolute border-b flex items-center justify-between `}
+        className={`w-full h-16 fixed bg-white text-smdark top-0 border-b flex items-center justify-between `}
       >
         <section
-          className={`h-16 max-w-60 w-full flex items-center gap-4 transition-all px-6 `}
+          className={`h-16 max-w-60 flex items-center gap-4 transition-all px-6 `}
         >
           <button
             id="hamburger"
@@ -39,14 +40,14 @@ const Navbar = () => {
               }`}
             ></span>
           </button>
-          <h1 className="text-main font-bold text-xl">MProject</h1>
+          <h1 className="text-main font-bold text-2xl">MProject</h1>
         </section>
         {/* <section className="bg-red-200">
         
       </section> */}
         <section className="px-6 flex items-center gap-3 hover:text-main cursor-pointer">
           <div className="text-lg">
-            <IoPerson />
+            <FaUserCircle />
           </div>
           <div className="flex items-center gap-1">
             <p className="">Kamal</p>

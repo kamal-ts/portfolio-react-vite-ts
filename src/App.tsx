@@ -5,11 +5,11 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import Login from "./components/layout/Auth/Login";
-import Register from "./components/layout/Auth/Register";
-import Home from "./components/layout/Home/Home";
-import Admin from "./components/layout/Admin/Admin";
-import { AuthProvider, useAuth } from "./components/layout/Auth/AuthContext";
+import Login from "./components/Layout/Auth/Login";
+import Register from "./components/Layout/Auth/Register";
+import Home from "./components/Layout/Home/Home";
+import Admin from "./components/Layout/Admin/Admin";
+import { AuthProvider, useAuth } from "./components/Layout/Auth/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Navbar from "./components/common/Navbar/Navbar";
@@ -28,9 +28,8 @@ const AfterLogin: React.FC<{ children: JSX.Element }> = ({ children }) => {
 const Layout: React.FC<{ children: JSX.Element }> = ({ children }) => {
   return (
     <>
-      <Navbar />
-      
       {children}
+      <Navbar />
       <ToastContainer />
     </>
   );

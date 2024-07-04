@@ -40,17 +40,21 @@ const Admin: React.FC = () => {
       toast.success("Anda berhasil login!");
     }
     getUser();
+
   }, [location]);
 
   return (
-    <section className="bg-lgdark w-full h-screen flex flex-col justify-center ">
-      <div className="bg-white shadow-lg rounded-lg max-w-96 w-full h-screen md:h-auto mx-auto text-secondary overflow-hidden">
-        <div className="px-6 py-4 border-b text-main">
+    <section
+      className=" absolute top-16 lg:left-72 lg:w-auto w-full h-auto lg:p-4 "
+    >
+      <div className="bg-white shadow-lg rounded-sm px-4 py-4 lg:h-auto text-smdark overflow-hidden">
+        <div className=" py-4">
           <h1 className="text-xl font-bold">Admin Page</h1>
         </div>
-
+        
         {token ? (
-          <div className="flex flex-col gap-6 p-6">
+          <div className="flex flex-col gap-6">
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores quibusdam consequuntur explicabo beatae similique, aperiam earum et aut tempora! Ratione, veritatis aut. Nihil doloremque ipsa sequi minus dolores, at odit?</p>
             <div className="">
               <p>Nama : {user?.name}</p>
               <p>Username : {user?.username}</p>

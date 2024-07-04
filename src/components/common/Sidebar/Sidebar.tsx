@@ -4,7 +4,7 @@ import {
   BiSolidData,
   BiSolidLogOutCircle,
 } from "react-icons/bi";
-import { FaHashtag } from "react-icons/fa";
+import {  FaHashtag, FaUserAlt, } from "react-icons/fa";
 
 const Sidebar: React.FC<{status: boolean}> = ({status}) => {
   
@@ -32,43 +32,36 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
       icon: <FaHashtag />,
       link: "",
     },
+    {
+      title: "profile",
+      icon: <FaUserAlt />,
+      link: "",
+    },
   ];
 
   const [windowDimensions, setWindowDimensions] = useState({
-
     width: window.innerWidth,
-
     height: window.innerHeight,
-
   });
 
 
   useEffect(() => {
-
     const handleResize = () => {
-
       setWindowDimensions({
-
         width: window.innerWidth,
-
         height: window.innerHeight,
-
       });
-
     };
-
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
-
-  }, []);
+  }, [status]);
 
   return (
     <aside
     style={{
       height: windowDimensions.height - 64
     }}
-      className={`max-w-60 w-full absolute text-secondary bg-white top-16 border-r lg:visible ${!status? "invisible": ""} transition-all duration-200`}
+      className={`max-w-60 lg:max-w-72 w-full fixed text-smdark bg-white top-16 border-r lg:block ${status? "" : "hidden"} transition-all duration-200`}
     >
       <div id="side" className="flex flex-col justify-between h-full">
           <section className="px-8">
@@ -89,7 +82,7 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
             ))}
           </section>
         <section>
-          <div className=" py-3 px-6 border-t hover:text-main hover:font-bold cursor-pointer transition-all duration-150 flex items-center gap-x-4">
+          <div className=" py-3 px-8 border-t hover:text-main cursor-pointer transition-all duration-150 flex items-center gap-x-4">
             <span className="text-xl ">
               <BiSolidLogOutCircle />
             </span>
