@@ -29,8 +29,8 @@ const AfterLogin: React.FC<{ children: JSX.Element }> = ({ children }) => {
 const Layout: React.FC<{ children: JSX.Element }> = ({ children }) => {
   return (
     <>
-      {children}
       <Navbar />
+      {children}
       <ToastContainer />
     </>
   );

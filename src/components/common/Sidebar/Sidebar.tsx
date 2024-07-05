@@ -5,11 +5,10 @@ import {
   BiSolidLogOutCircle,
 } from "react-icons/bi";
 import {  FaHashtag, FaUserAlt, } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar: React.FC<{status: boolean}> = ({status}) => {
   const navigate = useNavigate();
-  const [activeMenu, setActiveMenu] = useState<string | null>("dashboard");
 
   interface Menu {
     title: string | null,
@@ -17,9 +16,11 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
     link: string | null,
   }
   const handleMenu = (e: Menu) => {
-    setActiveMenu(e.title);
     navigate(`${e.link}`);
   };
+
+  // to get path url
+  const location = useLocation()
 
   const menu: Array<Menu> = [
     {
@@ -66,7 +67,7 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
     style={{
       height: windowDimensions.height - 64
     }}
-      className={`max-w-60 lg:max-w-72 w-full fixed text-smdark bg-white top-16 border-r lg:block ${status? "" : "hidden"} transition-all duration-200`}
+      className={`max-w-60 lg:max-w-72 w-full fixed text-smdark bg-white top-16 border-r lg:block ${status? "" : "hidden"} transition-all duration-200 `}
     >
       <div id="side" className="flex flex-col justify-between h-full">
           <section className="px-8">
@@ -78,10 +79,10 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
                 onClick={() => handleMenu(m)}
                 key={index}
                 className={`${
-                  activeMenu === m.title ? "bg-xldark text-main" : ""
+                  ( m.link === location.pathname) ? "bg-xldark text-main" : ""
                 } hover:bg-xldark py-2 px-4 mt-1 rounded-lg cursor-pointer flex items-center gap-x-4 transition-all duration-200 capitalize`}
               >
-                <span className="text-base">{m.icon}</span>
+                <span className="text-2xl">{m.icon}</span>
                 <span>{m.title}</span>
               </div>
             ))}
