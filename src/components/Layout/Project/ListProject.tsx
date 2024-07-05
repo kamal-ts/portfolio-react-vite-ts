@@ -30,13 +30,13 @@ const ListProject = () => {
 
   return (
     <section className="content">
-      <div className="bg-white shadow-lg rounded-sm px-4 py-4 lg:h-auto text-smdark overflow-hidden min-h-96">
+      <div className="bg-white shadow-lg rounded-sm px-4 py-4 lg:h-auto text-smdark min-h-96 w-auto overflow-x-auto">
         <h1 className="text-xl font-bold py-4">Project</h1>
         {error && <p>{error}</p>}
-        <div className="">
+        <div className="w-auto overflow-x-auto">
           <table 
           style={{width: "100%"}}
-          className="divide-gray-200">
+          className="divide-gray-200 w-auto overscroll-contain overflow-x-auto">
             <thead className="bg-gray-50 ">
               <tr className="odd:bg-white even:bg-slate-100">
                 <th >Title</th>

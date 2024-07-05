@@ -7,14 +7,14 @@ body {
 }
 
 td {
-    @apply px-6 py-4 whitespace-nowrap text-sm
+    @apply px-6 py-4 whitespace-nowrap text-sm text-wrap
 }
 th {
     @apply px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider
 }
 
 .content {
-    @apply absolute top-16 lg:left-72 lg:w-auto w-full h-screen lg:p-4
+    @apply absolute top-16 lg:left-72 lg:w-auto w-auto overflow-x-auto h-screen lg:p-4
 }
 
 .navbar-fixed {
