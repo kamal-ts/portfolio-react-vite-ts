@@ -8,12 +8,13 @@ import {
 import Login from "./components/Layout/Auth/Login";
 import Register from "./components/Layout/Auth/Register";
 import Home from "./components/Layout/Home/Home";
-import Admin from "./components/Layout/Admin/Admin";
 import { AuthProvider, useAuth } from "./components/Layout/Auth/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Navbar from "./components/common/Navbar/Navbar";
-import ListProject from "./components/Layout/Project/ListProject";
+import ListProject from "./components/Layout/Admin/Project/ListProject";
+import Profile from "./components/Layout/Admin/Profile/Profile";
+import Dashboard from "./components/Layout/Admin/Dashboard/Dashboard";
 // import Sidebar from "./components/common/Sidebar/Sidebar";
 
 const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -63,7 +64,7 @@ const App: React.FC = () => {
             path="/admin"
             element={
               <PrivateRoute>
-                <Layout children={<Admin />} />
+                <Layout children={<Dashboard />} />
               </PrivateRoute>
             }
           />
@@ -75,6 +76,15 @@ const App: React.FC = () => {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/admin/profile"
+            element={
+              <PrivateRoute>
+                <Layout children={<Profile />} />
+              </PrivateRoute>
+            }
+          />
+
         </Routes>
       </Router>
     </AuthProvider>

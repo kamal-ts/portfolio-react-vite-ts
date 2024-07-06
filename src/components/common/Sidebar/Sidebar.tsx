@@ -41,7 +41,7 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
     {
       title: "profile",
       icon: <FaUserAlt />,
-      link: "",
+      link: "/admin/profile",
     },
   ];
 
@@ -67,7 +67,7 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
     style={{
       height: windowDimensions.height - 64
     }}
-      className={`max-w-60 lg:max-w-72 w-full fixed text-smdark bg-white top-16 border-r lg:block ${status? "" : "hidden"} transition-all duration-200 `}
+      className={`max-w-60 lg:max-w-72 w-full fixed text-smdark dark:text-secondary bg-white dark:bg-dark top-16 border-r dark:border-r-smdark lg:block ${status? "" : "hidden"} transition-all duration-200 `}
     >
       <div id="side" className="flex flex-col justify-between h-full">
           <section className="px-8">
@@ -79,8 +79,8 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
                 onClick={() => handleMenu(m)}
                 key={index}
                 className={`${
-                  ( m.link === location.pathname) ? "bg-xldark text-main" : ""
-                } hover:bg-xldark py-2 px-4 mt-1 rounded-lg cursor-pointer flex items-center gap-x-4 transition-all duration-200 capitalize`}
+                  ( m.link === location.pathname) ? "bg-xldark dark:bg-smdark text-main" : ""
+                } hover:bg-xldark dark:hover:bg-smdark py-2 px-4 mt-1 rounded-lg cursor-pointer flex items-center gap-x-4 transition-all duration-200 capitalize`}
               >
                 <span className="text-2xl">{m.icon}</span>
                 <span>{m.title}</span>
@@ -88,7 +88,7 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
             ))}
           </section>
         <section>
-          <div className=" py-3 px-8 border-t hover:text-main cursor-pointer transition-all duration-150 flex items-center gap-x-4">
+          <div className=" py-3 px-8 border-t dark:border-t-smdark hover:text-main cursor-pointer transition-all duration-150 flex items-center gap-x-4">
             <span className="text-xl ">
               <BiSolidLogOutCircle />
             </span>

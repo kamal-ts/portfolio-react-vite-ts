@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../Auth/AuthContext";
+import { useAuth } from "../../Auth/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Content from "../../common/Content/Content";
+import Content from "../../../common/Content/Content";
 
-const Admin: React.FC = () => {
+const Profile: React.FC = () => {
   const { token, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -46,9 +46,9 @@ const Admin: React.FC = () => {
   return (
     <Content>
 
-      <div className="bg-white lg:border-2 lg:border-dashed lg:rounded-lg lg:p-4">
+      <div className="content">
         <div className=" py-4">
-          <h1 className="text-xl font-bold">Admin Page</h1>
+          <h1 className="text-xl font-bold">Profile Page</h1>
         </div>
         
         {token ? (
@@ -77,4 +77,4 @@ const Admin: React.FC = () => {
   );
 };
 
-export default Admin;
+export default Profile;

@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <header className="">
       <nav
-        className={`w-full h-16 fixed bg-white text-smdark top-0 border-b flex items-center justify-between`}
+        className={`w-full h-16 fixed top-0 border-b dark:border-b-smdark flex items-center justify-between`}
       >
         <section
           className={`h-16 max-w-60 flex items-center gap-4 transition-all px-6 `}
