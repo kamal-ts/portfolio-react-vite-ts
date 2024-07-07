@@ -1,5 +1,7 @@
-import React from "react";
-import { ProjectType } from "./interface";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { API_MYPROJECT_ENDPOINTS } from "../../../../util/apiConfig";
+import Content from "../../../common/Content/Content";
 import {
   FaEdit,
   FaEye,
@@ -8,17 +10,56 @@ import {
   FaSearch,
   FaTrash,
 } from "react-icons/fa";
-import Content from "../../../common/Content/Content";
 
-const ListProject: React.FC<{
-  error: string;
-  project: [ProjectType] | undefined;
-  handleEvents: (e: string) => void;
-}> = ({ error, project, handleEvents }) => {
+const ListProject = () => {
+
+  const [events, setevents] = useState("list")
+
+  const [project, setProject] = useState<[Project] | undefined >();
+  const [error, setError] = useState("");
+
+  const getProject = async () => {
+    try {
+      const result = await axios.get(API_MYPROJECT_ENDPOINTS);
+      setProject(result.data.data);
+    } catch (error) {
+      setError("error");
+    }
+  };
+
+  const handleEvents = (e: string) => {
+    setevents(e);
+  }
+
+  useEffect(() => {
+    getProject();
+  }, []);
+
   return (
     <Content>
-      <section className="content">
-        <h1 className="text-xl font-bold py-4">Project</h1>
+      <div className="content">
+        {events === "list" && (
+          <List error={error} project={project} handleEvents={handleEvents}/>
+        ) || 
+        events === "add" && (
+          <Add />
+        )}
+        
+      </div>
+    </Content>
+  );
+};
+
+export default ListProject;
+
+const List: React.FC<{
+  error: string, 
+  project: [Project] | undefined,
+  handleEvents: (e: string) => void
+}> = ({error, project, handleEvents}) => {
+  return (
+    <>
+    <h1 className="text-xl font-bold py-4">Project</h1>
         {error && <p>{error}</p>}
         <div className="py-4 flex items-center justify-between gap-4 text-secondary ">
           <div className="flex items-center gap-2 min-w-96">
@@ -56,9 +97,8 @@ const ListProject: React.FC<{
           </div>
           <div className="">
             <button
-              onClick={() => handleEvents("create")}
-              className="flex items-center gap-1 px-4 py-2 bg-main text-white rounded-lg"
-            >
+            onClick={ () => handleEvents("add")}
+            className="flex items-center gap-1 px-4 py-2 bg-main text-white rounded-lg">
               <FaPlus />
               <span>Add Project</span>
             </button>
@@ -76,7 +116,7 @@ const ListProject: React.FC<{
               </tr>
             </thead>
             <tbody className=" dark:bg-smdark ">
-              {project?.map<JSX.Element>((e: ProjectType, index: number) => (
+              {project?.map<JSX.Element>((e: Project, index: number) => (
                 <tr key={index} className=" border dark:border-secondary">
                   <td>{e.title}</td>
                   <td>{e.category}</td>
@@ -170,9 +210,19 @@ const ListProject: React.FC<{
             </li>
           </ul>
         </nav>
-      </section>
-    </Content>
-  );
-};
+    </>
+  )
+}
 
-export default ListProject;
+const Add = () => {
+  return (
+    <h1>Add</h1>
+  )
+}
+
+interface Project {
+  title: string;
+  tag: string;
+  category: string;
+  createdAt: string;
+}
