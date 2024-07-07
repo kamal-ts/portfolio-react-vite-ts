@@ -4,5 +4,6 @@ export interface ProjectType {
     tag: string;
     category: string;
     createdAt: string;
+    id: string
 }
 

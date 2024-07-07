@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ProjectType } from "./interface";
 import {
   FaEdit,
@@ -9,12 +9,19 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import Content from "../../../common/Content/Content";
+import SmModal from "../../../common/Modal/SmModal";
+import RegularButton from "../../../common/Button/RegularButton";
+import { RiErrorWarningLine } from "react-icons/ri";
 
 const ListProject: React.FC<{
   error: string;
   project: [ProjectType] | undefined;
   handleEvents: (e: string) => void;
-}> = ({ error, project, handleEvents }) => {
+  handleDeleteProject: (idProject: string) => Promise<void>;
+}> = ({ error, project, handleEvents, handleDeleteProject }) => {
+  const [idProject, setIdProject] = useState<string>("");
+  const [modalIsActive, setModalIsActive] = useState(false)
+
   return (
     <Content>
       <section className="content">
@@ -93,9 +100,12 @@ const ListProject: React.FC<{
                       >
                         <FaEye />
                       </a>
-                      <a href="#" className="text-red-600 hover:text-red-900">
+                      <button
+                        onClick={() =>{ setIdProject(e.id); setModalIsActive(true)}}
+                        className="text-red-600 hover:text-red-900"
+                      >
                         <FaTrash />
-                      </a>
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -170,6 +180,33 @@ const ListProject: React.FC<{
             </li>
           </ul>
         </nav>
+          <SmModal isAcctive={modalIsActive}>
+            <div className="max-w-xs w-full p-6 bg-white rounded-3xl flex flex-col gap-6">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <h1 className="text-7xl text-red-500">
+              <RiErrorWarningLine />
+                </h1>
+                <h1 className="text-xl font-semibold">Are You Sure ?</h1>
+                <p className="text-secondary">You are going to delete the project</p>
+              </div>
+              <div className="flex gap-4">
+                <RegularButton
+                onClick={() => setModalIsActive(!modalIsActive)}
+                Bgcolor="#f1f5f9"
+                color="#64748b"
+                >
+                  Cencel
+                </RegularButton>
+                <RegularButton
+                  onClick={ async() => { await handleDeleteProject(idProject); setModalIsActive(!modalIsActive)}}
+                  Bgcolor="#dc2626"
+                  >
+                  Delete
+                </RegularButton>
+              </div>
+            </div>
+          </SmModal>
+
       </section>
     </Content>
   );

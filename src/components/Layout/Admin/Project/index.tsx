@@ -5,10 +5,14 @@ import { ProjectType } from "./interface";
 import ListProject from "./ListProject";
 import CreateProject from "./CreateProject";
 import UpdateProject from "./UpdateProject";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../../Auth/AuthContext";
 
 const Project = () => {
+  // to conttrol project page
   const [events, setevents] = useState("list");
-
+  const {token} = useAuth()
   const [project, setProject] = useState<[ProjectType] | undefined>();
   const [error, setError] = useState("");
 
@@ -21,23 +25,47 @@ const Project = () => {
     }
   };
 
+  const handleDeleteProject = async (idProject: string | null) => {
+    try {
+      await axios.delete((API_MYPROJECT_ENDPOINTS+"/"+idProject), 
+        {headers: {Authorization: token}}
+      );
+      await getProject();
+      toast.success("Deleting Project was Successfull");
+    } catch (error) {
+      setError("Deleting Failed!!!")
+    }
+  }
+
   const handleEvents = (e: string) => {
     setevents(e);
   };
 
+  const location = useLocation();
   useEffect(() => {
     getProject();
-  }, []);
+      if (location.state && location.state.notifFromLogin) {
+        toast.success("Your Project Was Created!");
+      }
+  }, [location]);
+
+
   return (
     <>
       {(events === "list" && (
+ 
         <ListProject
           error={error}
           project={project}
           handleEvents={handleEvents}
-        />
+          handleDeleteProject={handleDeleteProject}
+          />
       )) ||
-        (events === "create" && <CreateProject handleEvents={handleEvents}/>) ||
+        (events === "create" && <CreateProject 
+          handleEvents={handleEvents} 
+          getProject={getProject}
+          
+        />) ||
         (events === "update" && <UpdateProject />)}
     </>
   );

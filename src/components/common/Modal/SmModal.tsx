@@ -1,0 +1,22 @@
+import React, { useEffect } from "react"
+
+const SmModal: React.FC<{children: JSX.Element, isAcctive: boolean}> = ({children, isAcctive}) => {
+
+    useEffect(() => {
+        if (isAcctive) {
+            document.body.style.overflow = "hidden"; 
+        }else{
+            document.body.style.overflow = "unset"; 
+            
+        }
+    }, [isAcctive])
+    
+  return (
+    <div className={`${isAcctive ? "": "hidden"} fixed h-screen w-full overflow-y-hidden backdrop-blur-md top-0 left-0 flex flex-col justify-center items-center bg-black bg-opacity-30 `}>
+        {children}
+        {isAcctive}
+    </div>
+  )
+}
+
+export default SmModal
