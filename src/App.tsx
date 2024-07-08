@@ -16,6 +16,9 @@ import Navbar from "./components/common/Navbar/Navbar";
 import Profile from "./components/Layout/Admin/Profile/Profile";
 import Dashboard from "./components/Layout/Admin/Dashboard/Dashboard";
 import Project from "./components/Layout/Admin/Project";
+import Sidebar2 from "./components/common/Sidebar/Sidebar2";
+import Modal from "./components/common/Modal/Modal";
+import ProductList from "./components/common/List/ProductList";
 // import Sidebar from "./components/common/Sidebar/Sidebar";
 
 const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -82,6 +85,32 @@ const App: React.FC = () => {
             element={
               <PrivateRoute>
                 <Layout children={<Profile />} />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/sidebar"
+            element={
+              <PrivateRoute>
+                <Sidebar2/>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/modal"
+            element={
+              <PrivateRoute>
+                <Modal/>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/list"
+            element={
+              <PrivateRoute>
+                <ProductList/>
               </PrivateRoute>
             }
           />
