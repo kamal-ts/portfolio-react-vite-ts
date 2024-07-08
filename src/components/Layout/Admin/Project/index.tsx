@@ -15,6 +15,7 @@ const Project = () => {
   const {token} = useAuth()
   const [project, setProject] = useState<[ProjectType] | undefined>();
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
 
   const getProject = async () => {
     try {
@@ -26,6 +27,7 @@ const Project = () => {
   };
 
   const handleDeleteProject = async (idProject: string | null) => {
+    setIsLoading(true);
     try {
       await axios.delete((API_MYPROJECT_ENDPOINTS+"/"+idProject), 
         {headers: {Authorization: token}}
@@ -34,6 +36,8 @@ const Project = () => {
       toast.success("Deleting Project was Successfull");
     } catch (error) {
       setError("Deleting Failed!!!")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -59,6 +63,7 @@ const Project = () => {
           project={project}
           handleEvents={handleEvents}
           handleDeleteProject={handleDeleteProject}
+          isLoading={isLoading}
           />
       )) ||
         (events === "create" && <CreateProject 

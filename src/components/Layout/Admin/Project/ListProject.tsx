@@ -18,7 +18,8 @@ const ListProject: React.FC<{
   project: [ProjectType] | undefined;
   handleEvents: (e: string) => void;
   handleDeleteProject: (idProject: string) => Promise<void>;
-}> = ({ error, project, handleEvents, handleDeleteProject }) => {
+  isLoading: boolean;
+}> = ({ error, project, handleEvents, handleDeleteProject, isLoading }) => {
   const [idProject, setIdProject] = useState<string>("");
   const [modalIsActive, setModalIsActive] = useState(false)
 
@@ -194,15 +195,18 @@ const ListProject: React.FC<{
                 onClick={() => setModalIsActive(!modalIsActive)}
                 Bgcolor="#f1f5f9"
                 color="#64748b"
-                >
-                  Cencel
-                </RegularButton>
+                title="Cencel"
+                isLoading={isLoading}
+
+                />
                 <RegularButton
                   onClick={ async() => { await handleDeleteProject(idProject); setModalIsActive(!modalIsActive)}}
                   Bgcolor="#dc2626"
-                  >
-                  Delete
-                </RegularButton>
+                  title="Delete"
+                  titleProses={"Deleting..."}
+                  isLoading={isLoading}
+
+                  />
               </div>
             </div>
           </SmModal>

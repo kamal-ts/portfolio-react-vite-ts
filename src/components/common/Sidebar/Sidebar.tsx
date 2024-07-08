@@ -67,7 +67,7 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
     style={{
       height: windowDimensions.height - 64
     }}
-      className={`max-w-60 lg:max-w-72 w-full fixed text-smdark dark:text-secondary bg-white dark:bg-dark top-16 border-r dark:border-r-smdark lg:block ${status? "" : "hidden"} transition-all duration-200 `}
+      className={`z-[9999] max-w-60 lg:max-w-72 w-full fixed text-smdark dark:text-secondary bg-white dark:bg-dark top-16 border-r dark:border-r-smdark lg:block ${status? "" : "hidden"} transition-all duration-200 `}
     >
       <div id="side" className="flex flex-col justify-between h-full">
           <section className="px-8">
