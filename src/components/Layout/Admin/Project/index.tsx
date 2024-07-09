@@ -8,6 +8,7 @@ import UpdateProject from "./UpdateProject";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../Auth/AuthContext";
+import DetileProject from "./DetileProject";
 
 const Project = () => {
   // to conttrol project page
@@ -70,8 +71,12 @@ const Project = () => {
           handleEvents={handleEvents} 
           getProject={getProject}
           
-        />) ||
-        (events === "update" && <UpdateProject />)}
+        />) 
+        ||
+        (events === "update" && <UpdateProject />)
+        ||
+        (events && <DetileProject idProject={events} token={token} handleEvents={handleEvents}/>)
+        }
     </>
   );
 };

@@ -76,6 +76,7 @@ const ListProject: React.FC<{
           <table style={{ width: "100%" }} className="divide-gray-200">
             <thead className="bg-gray-50 dark:bg-smdark">
               <tr className="odd:bg-white dark:odd:bg-smdark even:bg-slate-100">
+                <th>#</th>
                 <th>Title</th>
                 <th>Tag</th>
                 <th>Category</th>
@@ -86,6 +87,7 @@ const ListProject: React.FC<{
             <tbody className=" dark:bg-smdark ">
               {project?.map<JSX.Element>((e: ProjectType, index: number) => (
                 <tr key={index} className=" border dark:border-secondary">
+                  <td>{e.id}</td>
                   <td>{e.title}</td>
                   <td>{e.category}</td>
                   <td>{e.tag}</td>
@@ -95,12 +97,12 @@ const ListProject: React.FC<{
                       <a href="#" className="text-main hover:text-indigo-900 ">
                         <FaEdit />
                       </a>
-                      <a
-                        href="#"
+                      <button
+                        onClick={() => {handleEvents(e.id)}}
                         className="text-green-600 hover:text-green-900 "
                       >
                         <FaEye />
-                      </a>
+                      </button>
                       <button
                         onClick={() =>{ setIdProject(e.id); setModalIsActive(true)}}
                         className="text-red-600 hover:text-red-900"

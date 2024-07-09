@@ -19,7 +19,9 @@ const RegularButton: React.FC<{
     <button
       onClick={onClick}
       style={{ backgroundColor: Bgcolor, color }}
-      className={`w-full py-3 px-4 text-sm font-bold rounded-3xl`}
+      className={`w-full py-3 px-4 text-sm font-bold rounded-3xl ${
+        isLoading ? "cursor-wait" : ""
+      }`}
       disabled={isLoading}
     >
       {isLoading ? (titleProses === null ? title : titleProses) : title}

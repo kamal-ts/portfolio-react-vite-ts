@@ -6,46 +6,63 @@ import axios from "axios";
 import { useAuth } from "../../Auth/AuthContext";
 import { toast } from "react-toastify";
 
-const CreateProject: React.FC<{ 
-  handleEvents: (e: string) => void, 
-  getProject: () => Promise<void> 
-}> = ({
-  handleEvents,
-  getProject,
-}) => {
+const CreateProject: React.FC<{
+  handleEvents: (e: string) => void;
+  getProject: () => Promise<void>;
+}> = ({ handleEvents, getProject }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>();
-  const [title, setTitle] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  const [tag, setTag] = useState<string>();
-  const [category, setCategory] = useState<string>();
-  const [linkWeb, setLinkWeb] = useState<string>();
-  const [linkGit, setLinkGit] = useState<string>();
+  const [error, setError] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [tag, setTag] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [linkWeb, setLinkWeb] = useState<string>("");
+  const [linkGit, setLinkGit] = useState<string>("");
 
   const backToListProject = () => handleEvents("list");
 
   const { token } = useAuth();
 
+  const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+      console.log('first', e.target.files[0])
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    let formData;
+    if (selectedFile) {
+      formData = new FormData();
+      formData.append("image", selectedFile);
+      formData.append("title", title);
+      formData.append("tag", tag);
+      formData.append("category", category);
+      formData.append("description", description);
+      formData.append("link_web", linkWeb);
+      formData.append("link_git", linkGit);
+    }else{ 
+      formData = {
+        title: title,
+        tag: tag,
+        category: category,
+        description: description,
+        link_web: linkWeb,
+        link_git: linkGit,
+      };
+    }
+
     try {
-      const response = await axios.post(
-        API_MYPROJECT_ENDPOINTS,
-        {
-          title: title,
-          tag: tag,
-          category: category,
-          description: description,
-          link_web: linkWeb,
-          link_git: linkGit,
-        },
-        { headers: { Authorization: `${token}` } }
-      );
+      const response = await axios.post(API_MYPROJECT_ENDPOINTS, formData, {
+        headers: { Authorization: `${token}` },
+      });
       console.log("response", response);
       await getProject();
       backToListProject();
-      toast.success("Creating Project was Success")
+      toast.success("Creating Project was Success");
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.data.errors) {
         setError(err.response.data.errors);
@@ -60,7 +77,7 @@ const CreateProject: React.FC<{
 
   return (
     <form onSubmit={handleSubmit}>
-      <section className="h-screen w-full bg-white dark:bg-dark absolute flex flex-col justify-between">
+      <section className="z-[9002] h-screen w-full bg-white dark:bg-dark absolute flex flex-col justify-between">
         <div className="p-4 border-b flex items-center gap-4">
           <button
             onClick={backToListProject}
@@ -70,13 +87,31 @@ const CreateProject: React.FC<{
           </button>
           <h1 className="text-xl font-bold uppercase">Create Your Product</h1>
         </div>
-        <div className="container py-4 px-4 lg:px-28 h-full overflow-y-auto ">
+        <div className="container py-4 pb-20 px-4 lg:px-28 h-full overflow-y-auto ">
           {error && (
             <section className="bg-red-100 text-red-500 p-2 rounded-md">
               <p>{error}!</p>
             </section>
           )}
           <section className="flex w-full flex-wrap gap-4 justify-between">
+            <div className="flex flex-col w-full gap-2 lg:w-[45%] ">
+              <label
+                className="block text-sm font-medium text-gray-900 dark:text-white"
+                htmlFor="file_input"
+              >
+                Upload file
+              </label>
+              <input
+                className="block w-full h-12 text-base text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                // aria-describedby="file_input_help"
+                // id="file_input"
+                type="file"
+                onChange={handleFileChange}
+              />
+              {selectedFile && (
+                <img src={URL.createObjectURL(selectedFile)} className="max-h-40" />
+              )}
+            </div>
             <div className="flex flex-col w-full gap-2 lg:w-[45%] lg:h-20">
               <label className="text-sm">Title</label>
               <input
@@ -143,6 +178,7 @@ const CreateProject: React.FC<{
                 required
               />
             </div>
+            
           </section>
         </div>
         <div className="px-4 py-2 border-t w-full flex gap-4 justify-end">
