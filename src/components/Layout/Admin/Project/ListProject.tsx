@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ProjectType } from "./interface";
+import { PagingPage, ProjectType } from "./interface";
 import {
   FaEdit,
   FaEye,
@@ -19,14 +19,49 @@ const ListProject: React.FC<{
   handleEvents: (e: string) => void;
   handleDeleteProject: (idProject: string) => Promise<void>;
   isLoading: boolean;
-}> = ({ error, project, handleEvents, handleDeleteProject, isLoading }) => {
+  paging: PagingPage | undefined;
+}> = ({
+  error,
+  project,
+  handleEvents,
+  handleDeleteProject,
+  isLoading,
+  paging,
+}) => {
   const [idProject, setIdProject] = useState<string>("");
-  const [modalIsActive, setModalIsActive] = useState(false)
+  const [modalIsActive, setModalIsActive] = useState(false);
+
+  const LoopPaging = () => {
+    if (paging?.total_page) {
+      for (let i = 1; i <= paging?.total_page; i++)
+        return (
+      <li>
+            {paging.current_page === i && (
+               <a
+               href="#"
+               aria-current="page"
+               className="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+             >
+               {i}
+             </a>
+            ) || (
+
+              <a
+              href="#"
+              className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
+              >
+              {i}
+            </a>
+            )}
+          </li>
+        );
+    }
+  };
 
   return (
     <Content>
       <section className="content">
-        <h1 className="text-xl font-bold py-4">Project</h1>
+        <h1 className="text-sm font-bold ">Project</h1>
         {error && <p>{error}</p>}
         <div className="py-4 flex items-center justify-between gap-4 text-secondary ">
           <div className="flex items-center gap-2 min-w-96">
@@ -98,13 +133,18 @@ const ListProject: React.FC<{
                         <FaEdit />
                       </a>
                       <button
-                        onClick={() => {handleEvents(e.id)}}
+                        onClick={() => {
+                          handleEvents(e.id);
+                        }}
                         className="text-green-600 hover:text-green-900 "
                       >
                         <FaEye />
                       </button>
                       <button
-                        onClick={() =>{ setIdProject(e.id); setModalIsActive(true)}}
+                        onClick={() => {
+                          setIdProject(e.id);
+                          setModalIsActive(true);
+                        }}
                         className="text-red-600 hover:text-red-900"
                       >
                         <FaTrash />
@@ -121,7 +161,7 @@ const ListProject: React.FC<{
           aria-label="Page navigation example"
           className="mt-4 w-full flex items-center justify-between"
         >
-          <span className="text-secondary">Page 1 of 100</span>
+          <span className="text-secondary">Page {paging?.current_page} of {paging?.total_page} | Total Data : {paging?.total_item}</span>
 
           <ul className="inline-flex -space-x-px text-base h-10">
             <li>
@@ -132,47 +172,8 @@ const ListProject: React.FC<{
                 Previous
               </a>
             </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                1
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                2
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                aria-current="page"
-                className="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-              >
-                3
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                4
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                5
-              </a>
-            </li>
+            {LoopPaging()}
+
             <li>
               <a
                 href="#"
@@ -183,36 +184,38 @@ const ListProject: React.FC<{
             </li>
           </ul>
         </nav>
-          <SmModal isAcctive={modalIsActive}>
-            <div className="max-w-xs w-full p-6 bg-white rounded-3xl flex flex-col gap-6">
-              <div className="flex flex-col items-center justify-center gap-2">
-                <h1 className="text-7xl text-red-500">
-              <RiErrorWarningLine />
-                </h1>
-                <h1 className="text-xl font-semibold">Are You Sure ?</h1>
-                <p className="text-secondary">You are going to delete the project</p>
-              </div>
-              <div className="flex gap-4">
-                <RegularButton
+        <SmModal isAcctive={modalIsActive}>
+          <div className="max-w-xs w-full p-6 bg-white rounded-3xl flex flex-col gap-6">
+            <div className="flex flex-col items-center justify-center gap-2">
+              <h1 className="text-7xl text-red-500">
+                <RiErrorWarningLine />
+              </h1>
+              <h1 className="text-xl font-semibold">Are You Sure ?</h1>
+              <p className="text-secondary">
+                You are going to delete the project
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <RegularButton
                 onClick={() => setModalIsActive(!modalIsActive)}
                 Bgcolor="#f1f5f9"
                 color="#64748b"
                 title="Cencel"
                 isLoading={isLoading}
-
-                />
-                <RegularButton
-                  onClick={ async() => { await handleDeleteProject(idProject); setModalIsActive(!modalIsActive)}}
-                  Bgcolor="#dc2626"
-                  title="Delete"
-                  titleProses={"Deleting..."}
-                  isLoading={isLoading}
-
-                  />
-              </div>
+              />
+              <RegularButton
+                onClick={async () => {
+                  await handleDeleteProject(idProject);
+                  setModalIsActive(!modalIsActive);
+                }}
+                Bgcolor="#dc2626"
+                title="Delete"
+                titleProses={"Deleting..."}
+                isLoading={isLoading}
+              />
             </div>
-          </SmModal>
-
+          </div>
+        </SmModal>
       </section>
     </Content>
   );

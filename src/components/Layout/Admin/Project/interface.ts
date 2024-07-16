@@ -15,3 +15,8 @@ export interface ProjectType {
     updatedAt?: true
 }
 
+export interface PagingPage {
+    current_page: number,
+    total_item: number,
+    total_page: number,    
+}

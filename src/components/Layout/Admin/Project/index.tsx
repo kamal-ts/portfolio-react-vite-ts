@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_MYPROJECT_ENDPOINTS } from "../../../../util/apiConfig";
-import { ProjectType } from "./interface";
+import { PagingPage, ProjectType } from "./interface";
 import ListProject from "./ListProject";
 import CreateProject from "./CreateProject";
 import UpdateProject from "./UpdateProject";
@@ -16,12 +16,14 @@ const Project = () => {
   const {token} = useAuth()
   const [project, setProject] = useState<[ProjectType] | undefined>();
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [paging, setPaging] = useState<PagingPage | undefined>();
 
   const getProject = async () => {
     try {
       const result = await axios.get(API_MYPROJECT_ENDPOINTS);
       setProject(result.data.data);
+      setPaging(result.data.paging);
     } catch (error) {
       setError("error");
     }
@@ -64,8 +66,7 @@ const Project = () => {
           project={project}
           handleEvents={handleEvents}
           handleDeleteProject={handleDeleteProject}
-          isLoading={isLoading}
-          />
+          isLoading={isLoading} paging={paging}          />
       )) ||
         (events === "create" && <CreateProject 
           handleEvents={handleEvents} 
