@@ -20,3 +20,10 @@ export interface PagingPage {
     total_item: number,
     total_page: number,    
 }
+
+export interface QueryParams {
+    page?: number,
+    title?: string,
+    tag?:string,
+    category?:string
+}

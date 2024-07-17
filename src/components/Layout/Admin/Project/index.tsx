@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_MYPROJECT_ENDPOINTS } from "../../../../util/apiConfig";
-import { PagingPage, ProjectType } from "./interface";
+import { PagingPage, ProjectType, QueryParams } from "./interface";
 import ListProject from "./ListProject";
 import CreateProject from "./CreateProject";
 import UpdateProject from "./UpdateProject";
@@ -18,14 +18,23 @@ const Project = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [paging, setPaging] = useState<PagingPage | undefined>();
+  // const [page, setPage] = useState<number>(1)
+  const [queryParams, setQueryParams] = useState<QueryParams | null>(null)
 
   const getProject = async () => {
+    setIsLoading(true);
     try {
-      const result = await axios.get(API_MYPROJECT_ENDPOINTS);
+         const result = await axios.get(API_MYPROJECT_ENDPOINTS, {
+            params: queryParams
+          });
+      console.log('queryParams', queryParams);
       setProject(result.data.data);
       setPaging(result.data.paging);
+      console.log('project', result);
     } catch (error) {
       setError("error");
+    }finally {
+      setIsLoading(false);
     }
   };
 
@@ -54,7 +63,7 @@ const Project = () => {
       if (location.state && location.state.notifFromLogin) {
         toast.success("Your Project Was Created!");
       }
-  }, [location]);
+  }, [location, queryParams]);
 
 
   return (
@@ -66,7 +75,9 @@ const Project = () => {
           project={project}
           handleEvents={handleEvents}
           handleDeleteProject={handleDeleteProject}
-          isLoading={isLoading} paging={paging}          />
+          isLoading={isLoading} paging={paging} 
+          setQueryParams={setQueryParams}     
+          />
       )) ||
         (events === "create" && <CreateProject 
           handleEvents={handleEvents} 

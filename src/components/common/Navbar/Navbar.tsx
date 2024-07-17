@@ -10,7 +10,7 @@ const Navbar = () => {
     setHamburger(!hamburger);
   };
   return (
-    <header className="">
+    <header className="z-[9000] relative">
       <nav
         className={`w-full h-16 fixed top-0 border-b dark:border-b-smdark flex items-center justify-between bg-white dark:bg-dark`}
       >
