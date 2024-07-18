@@ -33,7 +33,7 @@ const DetileProject: React.FC<{
       }
     };
     getSingleProduct();
-  }, [idProject, token]);
+  }, [idProject, tag, token]);
 
   return (
     <div className="z-[9002] h-screen w-full bg-white dark:bg-dark absolute flex flex-col justify-normal">
@@ -46,27 +46,31 @@ const DetileProject: React.FC<{
         </button>
         <h1 className="text-xl font-bold uppercase">Detile Product</h1>
       </div>
-      <div className="w-full h-auto overflow-y-auto">
+      <div className="w-full h-auto overflow-y-auto bg-white">
         {(product && (
-          <div className="p-4 h-auto max-w-2xl mx-auto ">
+          <div className="h-auto max-w-4xl mx-auto bg-white lg:my-10 lg:rounded-3xl border overflow-hidden">
             {error && <p>{error}</p>}
-            <h1 className="font-semibold text-3xl">{product?.title}</h1>
+            {product !== undefined && product.image.length > 0 && (
+              <div
+                style={{
+                  backgroundImage: `url(${product?.image?.[0].secure_url})`,
+                }}
+                className="w-full h-40 lg:h-96 bg-cover bg-center"
+              ></div>
+            )}
+            <section className="lg:px-16 px-4 mt-10">
+
+            <h1 className="font-semibold text-xl lg:text-3xl">{product?.title}</h1>
             <h5 className="text-sm text-main">{product?.tag}</h5>
             <h5 className="text-sm text-secondary">
               Publis in {product?.createdAt}
             </h5>
-            {product !== undefined && product.image.length > 0 && (
-              <img
-                src={product?.image?.[0].secure_url}
-                alt="image product"
-                className="h-96 w-full mt-10 mx-auto rounded-lg"
-              />
-            )}
 
             <div
               className="my-10 text-lg text-justify"
               dangerouslySetInnerHTML={{ __html: description }}
-            />
+              />
+              </section>
           </div>
         )) || (
           <div className="p-4 h-auto max-w-2xl mx-auto my-10">

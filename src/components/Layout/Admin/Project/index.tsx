@@ -77,6 +77,7 @@ const Project = () => {
           handleDeleteProject={handleDeleteProject}
           isLoading={isLoading} paging={paging} 
           setQueryParams={setQueryParams}     
+          queryParams={queryParams}
           />
       )) ||
         (events === "create" && <CreateProject 

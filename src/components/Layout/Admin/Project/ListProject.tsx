@@ -4,7 +4,7 @@ import {
   FaEdit,
   FaEye,
   FaFilter,
-  FaPlus,
+  // FaPlus,
   FaSearch,
   FaTrash,
 } from "react-icons/fa";
@@ -21,6 +21,7 @@ const ListProject: React.FC<{
   isLoading: boolean;
   paging: PagingPage | undefined;
   setQueryParams: React.Dispatch<React.SetStateAction<QueryParams | null>>;
+  queryParams: QueryParams | null
 }> = ({
   error,
   project,
@@ -29,6 +30,7 @@ const ListProject: React.FC<{
   isLoading,
   paging,
   setQueryParams,
+  queryParams,
 }) => {
   const [idProject, setIdProject] = useState<string>("");
   const [modalIsActive, setModalIsActive] = useState(false);
@@ -42,7 +44,7 @@ const ListProject: React.FC<{
           <li key={i}>
             {(paging.current_page === i && (
               <button
-                onClick={() => setQueryParams({ page: i })}
+                onClick={() => setQueryParams({...queryParams, page: i })}
                 aria-current="page"
                 className="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
               >
@@ -50,7 +52,7 @@ const ListProject: React.FC<{
               </button>
             )) || (
               <button
-                onClick={() => setQueryParams({ page: i })}
+                onClick={() => setQueryParams({...queryParams, page: i })}
                 className={`flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
               >
                 {i}
@@ -65,8 +67,16 @@ const ListProject: React.FC<{
 
   const search = (e: FormEvent) => {
     e.preventDefault();
-    setQueryParams({ title: keyword });
+    setQueryParams({ ...queryParams, title: keyword });
   };
+
+  const previous = () => {
+    if (paging?.current_page && paging.current_page <= 1) {
+      setQueryParams({...queryParams, page: 1})
+    } else if (paging?.current_page) {
+      setQueryParams({...queryParams, page: paging?.current_page - 1})
+    }
+  }
 
   return (
     <Content>
@@ -92,7 +102,6 @@ const ListProject: React.FC<{
                   id="default-search"
                   className="block w-full px-4 py-2 ps-10 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Keywor..."
-            
                 />
                 <button
                   type="submit"
@@ -109,13 +118,18 @@ const ListProject: React.FC<{
             </button>
           </div>
           <div className="">
-            <button
+            <RegularButton 
+            onClick={() => handleEvents("create")} 
+            title="Add Project"
+            
+            />
+            {/* <button
               onClick={() => handleEvents("create")}
               className="flex items-center gap-1 px-4 py-2 bg-main text-white rounded-lg"
             >
               <FaPlus />
               <span>Add Project</span>
-            </button>
+            </button> */}
           </div>
         </div>
         <div className="w-auto overflow-x-auto rounded-lg border dark:border-secondary">
@@ -192,6 +206,15 @@ const ListProject: React.FC<{
                     </td>
                   </tr>
                 ))}
+                {
+                  !project?.[0] && isLoading === false &&(
+                    <tr>
+                      <td colSpan={6} className="text-center">
+                        <div className="bg-xldark py-10">Data Empty</div>
+                      </td>
+                    </tr>
+                  )
+                }
             </tbody>
           </table>
         </div>
@@ -207,12 +230,12 @@ const ListProject: React.FC<{
 
           <ul className="inline-flex -space-x-px text-base h-10">
             <li>
-              <a
-                href="#"
+              <button
+                onClick={previous}
                 className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 Previous
-              </a>
+              </button>
             </li>
             {LoopPaging()}
 
@@ -243,6 +266,7 @@ const ListProject: React.FC<{
                 Bgcolor="#f1f5f9"
                 color="#64748b"
                 title="Cencel"
+                borderColor="#94a3b8"
                 isLoading={isLoading}
               />
               <RegularButton
