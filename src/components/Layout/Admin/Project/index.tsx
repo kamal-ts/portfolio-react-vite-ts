@@ -9,31 +9,36 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../Auth/AuthContext";
 import DetileProject from "./DetileProject";
+import EditProject from "./EditProject";
 
 const Project = () => {
   // to conttrol project page
   const [events, setevents] = useState("list");
-  const {token} = useAuth()
+  const { token } = useAuth();
   const [project, setProject] = useState<[ProjectType] | undefined>();
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [paging, setPaging] = useState<PagingPage | undefined>();
+  const [paging, setPaging] = useState<PagingPage>({
+    current_page: 1,
+    total_item: 10,
+    total_page: 0,
+  });
   // const [page, setPage] = useState<number>(1)
-  const [queryParams, setQueryParams] = useState<QueryParams | null>(null)
+  const [queryParams, setQueryParams] = useState<QueryParams | null>(null);
 
   const getProject = async () => {
     setIsLoading(true);
     try {
-         const result = await axios.get(API_MYPROJECT_ENDPOINTS, {
-            params: queryParams
-          });
-      console.log('queryParams', queryParams);
+      const result = await axios.get(API_MYPROJECT_ENDPOINTS, {
+        params: queryParams,
+      });
+      console.log("queryParams", queryParams);
       setProject(result.data.data);
       setPaging(result.data.paging);
-      console.log('project', result);
+      console.log("project", result);
     } catch (error) {
       setError("error");
-    }finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -41,17 +46,17 @@ const Project = () => {
   const handleDeleteProject = async (idProject: string | null) => {
     setIsLoading(true);
     try {
-      await axios.delete((API_MYPROJECT_ENDPOINTS+"/"+idProject), 
-        {headers: {Authorization: token}}
-      );
+      await axios.delete(API_MYPROJECT_ENDPOINTS + "/" + idProject, {
+        headers: { Authorization: token },
+      });
       await getProject();
       toast.success("Deleting Project was Successfull");
     } catch (error) {
-      setError("Deleting Failed!!!")
+      setError("Deleting Failed!!!");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleEvents = (e: string) => {
     setevents(e);
@@ -60,36 +65,39 @@ const Project = () => {
   const location = useLocation();
   useEffect(() => {
     getProject();
-      if (location.state && location.state.notifFromLogin) {
-        toast.success("Your Project Was Created!");
-      }
+    if (location.state && location.state.notifFromLogin) {
+      toast.success("Your Project Was Created!");
+    }
   }, [location, queryParams]);
-
 
   return (
     <>
       {(events === "list" && (
- 
         <ListProject
           error={error}
           project={project}
           handleEvents={handleEvents}
           handleDeleteProject={handleDeleteProject}
-          isLoading={isLoading} paging={paging} 
-          setQueryParams={setQueryParams}     
+          isLoading={isLoading}
+          paging={paging}
+          setQueryParams={setQueryParams}
           queryParams={queryParams}
-          />
+        />
       )) ||
-        (events === "create" && <CreateProject 
-          handleEvents={handleEvents} 
-          getProject={getProject}
-          
-        />) 
-        ||
-        (events === "update" && <UpdateProject />)
-        ||
-        (events && <DetileProject idProject={events} token={token} handleEvents={handleEvents}/>)
-        }
+        (events === "create" && (
+          <CreateProject handleEvents={handleEvents} getProject={getProject} />
+        )) ||
+        (events === "update" && <UpdateProject />) ||
+        (events === "edit" && (
+          <EditProject handleEvents={handleEvents} getProject={getProject} />
+        )) ||
+        (events && (
+          <DetileProject
+            idProject={events}
+            token={token}
+            handleEvents={handleEvents}
+          />
+        ))}
     </>
   );
 };

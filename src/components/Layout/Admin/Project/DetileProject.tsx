@@ -4,6 +4,7 @@ import { ProjectType } from "./interface";
 import axios from "axios";
 import { API_MYPROJECT_ENDPOINTS } from "../../../../util/apiConfig";
 import Paragraph from "../../../common/Skeleton/Paragraph";
+import SpeedMenu from "../../../common/SpeedMenu/SpeedMenu";
 
 const DetileProject: React.FC<{
   idProject: string;
@@ -36,8 +37,8 @@ const DetileProject: React.FC<{
   }, [idProject, tag, token]);
 
   return (
-    <div className="z-[9002] h-screen w-full bg-white dark:bg-dark absolute flex flex-col justify-normal">
-      <div className="p-4 border-b flex items-center gap-4">
+    <div className="z-[9002] h-screen w-full bg-white dark:bg-dark dark:text-mddark absolute flex flex-col justify-normal">
+      <div className="p-4 border-b dark:border-smdark flex items-center gap-4">
         <button
           onClick={() => handleEvents("list")}
           className="text-3xl hover:text-main"
@@ -46,9 +47,9 @@ const DetileProject: React.FC<{
         </button>
         <h1 className="text-xl font-bold uppercase">Detile Product</h1>
       </div>
-      <div className="w-full h-auto overflow-y-auto bg-white">
+      <div className="w-full h-auto overflow-y-auto bg-white dark:bg-dark">
         {(product && (
-          <div className="h-auto max-w-4xl mx-auto bg-white lg:my-10 lg:rounded-3xl border overflow-hidden">
+          <div className="h-auto max-w-4xl mx-auto bg-white dark:bg-smdark lg:my-10 lg:rounded-3xl border dark:border-smdark overflow-hidden">
             {error && <p>{error}</p>}
             {product !== undefined && product.image.length > 0 && (
               <div
@@ -59,18 +60,21 @@ const DetileProject: React.FC<{
               ></div>
             )}
             <section className="lg:px-16 px-4 mt-10">
+              <h1 className="font-semibold text-xl lg:text-3xl">
+                {product?.title}
+              </h1>
+              <h5 className="text-sm text-main">{product?.tag}</h5>
+              <h5 className="text-sm text-secondary">
+                Publis in {product?.createdAt}
+              </h5>
 
-            <h1 className="font-semibold text-xl lg:text-3xl">{product?.title}</h1>
-            <h5 className="text-sm text-main">{product?.tag}</h5>
-            <h5 className="text-sm text-secondary">
-              Publis in {product?.createdAt}
-            </h5>
-
-            <div
-              className="my-10 text-lg text-justify"
-              dangerouslySetInnerHTML={{ __html: description }}
+              <div
+                className="my-10 text-lg text-justify"
+                dangerouslySetInnerHTML={{ __html: description }}
               />
-              </section>
+            </section>
+
+            <SpeedMenu/>
           </div>
         )) || (
           <div className="p-4 h-auto max-w-2xl mx-auto my-10">

@@ -5,9 +5,11 @@ const RegularButton: React.FC<{
   color?: string;
   onClick: () => void;
   titleProses?: string | null;
-  title: string;
+  title?: string;
   isLoading?: boolean;
   borderColor?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  children?: any;
 }> = ({
   title,
   color = "#ffffff",
@@ -16,6 +18,7 @@ const RegularButton: React.FC<{
   titleProses = null,
   isLoading = false,
   borderColor,
+  children,
 }) => {
   return (
     <button
@@ -31,7 +34,13 @@ const RegularButton: React.FC<{
       }`}
       disabled={isLoading}
     >
-      {isLoading ? (titleProses === null ? title : titleProses) : title}
+      {children
+        ? children
+        : isLoading
+        ? titleProses === null
+          ? title
+          : titleProses
+        : title}
     </button>
   );
 };

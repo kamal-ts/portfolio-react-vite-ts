@@ -1,12 +1,8 @@
 import React, { FormEvent, useState } from "react";
 import { PagingPage, ProjectType, QueryParams } from "./interface";
 import {
-  FaEdit,
-  FaEye,
   FaFilter,
-  // FaPlus,
   FaSearch,
-  FaTrash,
 } from "react-icons/fa";
 import Content from "../../../common/Content/Content";
 import SmModal from "../../../common/Modal/SmModal";
@@ -19,7 +15,7 @@ const ListProject: React.FC<{
   handleEvents: (e: string) => void;
   handleDeleteProject: (idProject: string) => Promise<void>;
   isLoading: boolean;
-  paging: PagingPage | undefined;
+  paging: PagingPage;
   setQueryParams: React.Dispatch<React.SetStateAction<QueryParams | null>>;
   queryParams: QueryParams | null
 }> = ({
@@ -35,6 +31,8 @@ const ListProject: React.FC<{
   const [idProject, setIdProject] = useState<string>("");
   const [modalIsActive, setModalIsActive] = useState(false);
   const [keyword, setKeyword] = useState<string>();
+
+  
 
   const LoopPaging = () => {
     const list = [];
@@ -67,7 +65,7 @@ const ListProject: React.FC<{
 
   const search = (e: FormEvent) => {
     e.preventDefault();
-    setQueryParams({ ...queryParams, title: keyword });
+      setQueryParams({ ...queryParams, title: keyword, page: 1});
   };
 
   const previous = () => {
@@ -78,13 +76,19 @@ const ListProject: React.FC<{
     }
   }
 
+  const next = () => {
+    if (paging.current_page < paging.total_page) {
+      setQueryParams({...queryParams, page: paging.current_page + 1})
+    } 
+  }
+
   return (
     <Content>
       <section className="content">
         <h1 className="text-sm font-bold ">Project</h1>
         {error && <p>{error}</p>}
-        <div className="py-4 flex items-center justify-between gap-4 text-secondary ">
-          <div className="flex items-center gap-2 min-w-96">
+        <div className="py-4 flex flex-col lg:flex-row items-center justify-between gap-4 text-secondary">
+          <div className="flex items-center gap-2 w-full lg:max-w-96 ">
             <form className="w-full" onSubmit={search}>
               <label
                 htmlFor="default-search"
@@ -92,7 +96,7 @@ const ListProject: React.FC<{
               >
                 Search
               </label>
-              <div className="z-[1] relative">
+              <div className="z-[1] relative flex flex-col justify-center items-center">
                 <div className="z-[1] absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                   <FaSearch />
                 </div>
@@ -100,36 +104,42 @@ const ListProject: React.FC<{
                   onChange={(e) => setKeyword(e.target.value)}
                   type="search"
                   id="default-search"
-                  className="block w-full px-4 py-2 ps-10 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Keywor..."
+                  className="block w-full px-4 py-2 ps-10 text-base text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="keyword title..."
                 />
                 <button
                   type="submit"
-                  className="text-white absolute end-2.5 bottom-1.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-1 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="text-white absolute end-[3.5px] bg-main hover:contrast-150 hover:con focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-3xl text-sm px-2 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Search
                 </button>
               </div>
             </form>
 
-            <button className="flex items-center gap-1 bg-lgdark dark:bg-smdark px-4 py-2 rounded-lg">
+             <button className="flex items-center gap-1 bg-lgdark dark:bg-smdark px-4 py-2 rounded-lg">
               <FaFilter />
               <span>Filter</span>
             </button>
           </div>
-          <div className="">
+          <div className="flex gap-2 w-full lg:w-80">
+            <RegularButton 
+            onClick={() => setQueryParams({title: ""})} 
+            ><span className="flex justify-center">
+
+              <svg className="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path>
+						</svg>
+              Refhres
+            </span>
+              </RegularButton>
             <RegularButton 
             onClick={() => handleEvents("create")} 
-            title="Add Project"
-            
-            />
-            {/* <button
-              onClick={() => handleEvents("create")}
-              className="flex items-center gap-1 px-4 py-2 bg-main text-white rounded-lg"
             >
-              <FaPlus />
-              <span>Add Project</span>
-            </button> */}
+              <span className="flex justify-center">
+              <svg className="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+              Add Project
+              </span>
+            </RegularButton>
           </div>
         </div>
         <div className="w-auto overflow-x-auto rounded-lg border dark:border-secondary">
@@ -171,36 +181,32 @@ const ListProject: React.FC<{
                 </tr>
               )) ||
                 project?.map<JSX.Element>((e: ProjectType, index: number) => (
-                  <tr key={index} className=" border dark:border-secondary">
-                    <td>{e.id}</td>
+                  <tr key={index} className="border-t dark:border-secondary">
+                    <td>{(paging?.current_page-1)*10+(index+1)}</td>
                     <td>{e.title}</td>
                     <td>{e.category}</td>
                     <td>{e.tag}</td>
                     <td>{e.createdAt}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-lg font-medium ">
+                    <td className="px-6 whitespace-nowrap text-right text-xs font-bold">
                       <div className="flex gap-2">
-                        <a
-                          href="#"
-                          className="text-main hover:text-indigo-900 "
-                        >
-                          <FaEdit />
-                        </a>
                         <button
                           onClick={() => {
                             handleEvents(e.id);
                           }}
-                          className="text-green-600 hover:text-green-900 "
+                          className="outline outline-2 outline-indigo-600 -outline-offset-1 hover:bg-indigo-600 text-indigo-600 hover:text-white px-2 py-1 rounded-2xl transition-colors "
                         >
-                          <FaEye />
+                          {/* <FaEye /> */}
+                          Detile
                         </button>
                         <button
                           onClick={() => {
                             setIdProject(e.id);
                             setModalIsActive(true);
                           }}
-                          className="text-red-600 hover:text-red-900"
+                          className="outline outline-2 outline-red-600 -outline-offset-1 hover:bg-red-600 text-red-600 hover:text-white px-2 py-1 rounded-2xl transition-colors "
                         >
-                          <FaTrash />
+                          {/* <FaTrash /> */}
+                          Delete
                         </button>
                       </div>
                     </td>
@@ -240,17 +246,17 @@ const ListProject: React.FC<{
             {LoopPaging()}
 
             <li>
-              <a
-                href="#"
+              <button
+                onClick={next}
                 className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 Next
-              </a>
+              </button>
             </li>
           </ul>
         </nav>
         <SmModal isAcctive={modalIsActive}>
-          <div className="max-w-xs w-full p-6 bg-white rounded-3xl flex flex-col gap-6">
+          <div className="max-w-xs w-full p-6 bg-white dark:bg-smdark rounded-3xl flex flex-col gap-6">
             <div className="flex flex-col items-center justify-center gap-2">
               <h1 className="text-7xl text-red-500">
                 <RiErrorWarningLine />

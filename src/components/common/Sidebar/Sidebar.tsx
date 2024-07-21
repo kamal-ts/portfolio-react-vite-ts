@@ -67,7 +67,7 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
     style={{
       height: windowDimensions.height - 64
     }}
-      className={`z-[9000] max-w-60 lg:max-w-72 w-full fixed text-smdark dark:text-secondary bg-white dark:bg-dark top-16 border-r dark:border-r-smdark transform lg:transform-none  ${status? "translate-x-0" : "-translate-x-full"} transition-transform duration-200 `}
+      className={`z-[9000] max-w-60 lg:max-w-72 w-full fixed text-smdark dark:text-secondary bg-white dark:bg-dark top-16 transform lg:transform-none  ${status? "translate-x-0" : "-translate-x-full"} transition-transform duration-200 `}
     >
       <div id="side" className="flex flex-col justify-between h-full">
           <section className="px-8">
@@ -88,8 +88,8 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
             ))}
           </section>
         <section>
-          <div className=" py-3 px-8 border-t dark:border-t-smdark hover:text-main cursor-pointer transition-all duration-150 flex items-center gap-x-4">
-            <span className="text-xl ">
+          <div className=" py-3 px-12 border-t dark:border-t-smdark hover:text-main cursor-pointer transition-all duration-150 flex items-center gap-x-4">
+            <span className="text-2xl ">
               <BiSolidLogOutCircle />
             </span>
             <span>Logout</span>

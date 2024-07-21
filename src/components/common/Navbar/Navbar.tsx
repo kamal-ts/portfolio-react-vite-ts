@@ -2,10 +2,11 @@ import { useState } from "react";
 import { IoChevronDown } from "react-icons/io5";
 import Sidebar from "../Sidebar/Sidebar";
 import { FaUserCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [hamburger, setHamburger] = useState(false);
-
+  const navigate = useNavigate();
   const handleMenu = () => {
     setHamburger(!hamburger);
   };
@@ -40,7 +41,7 @@ const Navbar = () => {
               }`}
             ></span>
           </button>
-          <h1 className="text-main font-bold text-2xl">MProject</h1>
+          <button onClick={() => navigate("/admin")} className="text-main font-bold text-2xl">MProject</button>
         </section>
         {/* <section className="bg-red-200">
         
