@@ -1,95 +1,131 @@
+import { useEffect, useState } from "react";
 import Content from "../../../common/Content/Content";
-import { PieChart, Pie, Cell } from "recharts";
+import { ProjectType } from "../Project/interface";
+import axios from "axios";
+import { API_MYPROJECT_ENDPOINTS } from "../../../../util/apiConfig";
+import RegularLoading from "../../../common/Loading/RegularLoading";
 
 const Dashboard = () => {
-  const data = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ];
+  const [project, setProject] = useState<[ProjectType] | undefined>();
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<TagType[]>();
+  const [highValue, sethighValue] = useState<number>(0)
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-  const RADIAN = Math.PI / 180;
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    index,
-  }: any) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
+  const getProject = async () => {
+    setIsLoading(true);
+    try {
+      const result = await axios.get(API_MYPROJECT_ENDPOINTS);
+      setProject(result.data.data);
+      console.log("project", result);
+      countProject(result.data.data);
+    } catch (error) {
+      setError("error");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    getProject();
+  }, []);
+
+  interface TagType {
+    name: string;
+    value: number;
+  }
+  const countProject = (projects: [ProjectType]) => {
+    const tags: TagType[] = [];
+    console.log("projects", projects);
+    let maxValue: number = 0
+    for (const p of projects) {
+      const splitP = p.tag.split(",");
+      console.log("splitP", splitP);
+      for (const subTag of splitP) {
+        console.log("subTag", subTag);
+
+        if (tags.some((tag) => tag.name === subTag)) {
+          const indexOfTags = tags.findIndex((t) => t.name === subTag);
+          tags[indexOfTags].value += 1;
+          maxValue = maxValue+1
+        } else {
+          tags.push({ name: subTag, value: 1 });
+          maxValue = maxValue+1
+        }
+      }
+    }
+    const tagsOrder: TagType[] = tags.sort((a, b) => b.value - a.value)
+    setData(tagsOrder);
+    sethighValue(tagsOrder[0].value);
+    console.log("tags", tags);
+  };
+
+  // chart
+  // const data = [
+  //   { name: "Group A", value: 1100 },
+  //   { name: "Group B", value: 400 },
+  //   { name: "Group C", value: 300 },
+  //   { name: "Group D", value: 200 },
+  // ];
 
   return (
     <Content>
       <div className="content h-auto">
-        <h1>Dashboard</h1>
-        <div className="flex flex-wrap gap-2 text-sm font-semibold text-white">
-          <article className="bg-gradient-to-r from-indigo-500 to-sky-500 w-full lg:w-80 p-4 my-4 rounded-2xl">
-            <h2>Total Project</h2>
-            <span className="font-semibold text-6xl text-white">2</span>
-          </article>
-          <article className="bg-gradient-to-r from-indigo-500 to-sky-500 w-full lg:w-80 p-4 my-4 rounded-2xl ">
-            <h2>Total User</h2>
-            <div className="flex justify-between items-end">
-              <span className="font-semibold text-6xl text-white">2</span>
-              <svg
-                className="w-[48px] h-[48px]"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H6Zm7.25-2.095c.478-.86.75-1.85.75-2.905a5.973 5.973 0 0 0-.75-2.906 4 4 0 1 1 0 5.811ZM15.466 20c.34-.588.535-1.271.535-2v-1a5.978 5.978 0 0 0-1.528-4H18a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2h-4.535Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+
+        {(isLoading && (
+          <div>
+            <RegularLoading />
+          </div>
+        )) || (
+          <>
+            <div className="flex justify-between gap-10 py-4 text-sm font-semibold">
+              <div>
+
+                <article className="text-white bg-gradient-to-r from-indigo-500 to-sky-500 w-full lg:w-80 p-4 rounded-2xl">
+                  <h2>Total Project</h2>
+                  <div className="flex justify-between items-end">
+                    <span className="font-semibold text-6xl text-white">
+                      {project?.length}
+                    </span>
+                    <svg
+                      className="w-[48px] h-[48px] text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 7.205c4.418 0 8-1.165 8-2.602C20 3.165 16.418 2 12 2S4 3.165 4 4.603c0 1.437 3.582 2.602 8 2.602ZM12 22c4.963 0 8-1.686 8-2.603v-4.404c-.052.032-.112.06-.165.09a7.75 7.75 0 0 1-.745.387c-.193.088-.394.173-.6.253-.063.024-.124.05-.189.073a18.934 18.934 0 0 1-6.3.998c-2.135.027-4.26-.31-6.3-.998-.065-.024-.126-.05-.189-.073a10.143 10.143 0 0 1-.852-.373 7.75 7.75 0 0 1-.493-.267c-.053-.03-.113-.058-.165-.09v4.404C4 20.315 7.037 22 12 22Zm7.09-13.928a9.91 9.91 0 0 1-.6.253c-.063.025-.124.05-.189.074a18.935 18.935 0 0 1-6.3.998c-2.135.027-4.26-.31-6.3-.998-.065-.024-.126-.05-.189-.074a10.163 10.163 0 0 1-.852-.372 7.816 7.816 0 0 1-.493-.268c-.055-.03-.115-.058-.167-.09V12c0 .917 3.037 2.603 8 2.603s8-1.686 8-2.603V7.596c-.052.031-.112.059-.165.09a7.816 7.816 0 0 1-.745.386Z" />
+                    </svg>
+                  </div>
+                </article>
+              </div>
+              
+              <div className="det w-full p-4 border rounded-2xl ">
+                <h1 className="font-semibold mb-4 ">Statistic Tag :</h1>
+                {data?.map((d, i) => (
+                  <div
+                    key={i}
+                    className={`py-1 px-4 capitalize font-normal w-full flex items-center gap-2`}
+                  >
+                    <div className="w-1/5">
+                      <p className={` text-sm text-secondary `}>
+                        {d.name}
+                      </p>
+                    </div>
+                    <div className="w-full">
+                      <div style={{width: `${(d.value / highValue) * 100 }%`}} className="h-2 bg-gradient-to-r from-indigo-500 to-sky-500 rounded-2xl p-2 flex items-center justify-end">
+                        <p className="text-white text-[10px]">used {d.value} times</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </article>
-        </div>
-        <div className="">
-          <PieChart width={400} height={400}>
-            <Pie
-              data={data}
-              cx={200}
-              cy={200}
-              labelLine={false}
-              label={renderCustomizedLabel}
-              outerRadius={150}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {data.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-          </PieChart>
-        </div>
+
+          </>
+        )}
       </div>
     </Content>
   );
