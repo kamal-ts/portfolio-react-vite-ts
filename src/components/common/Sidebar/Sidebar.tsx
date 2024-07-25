@@ -4,8 +4,9 @@ import {
   BiSolidData,
   BiSolidLogOutCircle,
 } from "react-icons/bi";
-import {  FaHashtag, FaUserAlt, } from "react-icons/fa";
+import {  FaUserAlt, } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../Layout/Auth/AuthContext";
 
 const Sidebar: React.FC<{status: boolean}> = ({status}) => {
   const navigate = useNavigate();
@@ -34,11 +35,6 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
       link: "/admin/project",
     },
     {
-      title: "tag",
-      icon: <FaHashtag />,
-      link: "",
-    },
-    {
       title: "profile",
       icon: <FaUserAlt />,
       link: "/admin/profile",
@@ -61,6 +57,13 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [status]);
+
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <aside
@@ -88,7 +91,9 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
             ))}
           </section>
         <section>
-          <div className=" py-3 px-12 border-t dark:border-t-smdark hover:text-main cursor-pointer transition-all duration-150 flex items-center gap-x-4">
+          <div 
+          onClick={handleLogout}
+          className=" py-3 px-12 border-t dark:border-t-smdark hover:text-main cursor-pointer transition-all duration-150 flex items-center gap-x-4">
             <span className="text-2xl ">
               <BiSolidLogOutCircle />
             </span>

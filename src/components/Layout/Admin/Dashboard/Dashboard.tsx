@@ -71,14 +71,16 @@ const Dashboard = () => {
   return (
     <Content>
       <div className="content h-auto">
-
+        {error && (
+          <h1>{error}</h1>
+        )}
         {(isLoading && (
           <div>
             <RegularLoading />
           </div>
         )) || (
           <>
-            <div className="flex justify-between gap-10 py-4 text-sm font-semibold">
+            <div className="flex justify-between gap-4 text-sm font-semibold">
               <div>
 
                 <article className="text-white bg-gradient-to-r from-indigo-500 to-sky-500 w-full lg:w-80 p-4 rounded-2xl">
@@ -115,7 +117,7 @@ const Dashboard = () => {
                       </p>
                     </div>
                     <div className="w-full">
-                      <div style={{width: `${(d.value / highValue) * 100 }%`}} className="h-2 bg-gradient-to-r from-indigo-500 to-sky-500 rounded-2xl p-2 flex items-center justify-end">
+                      <div style={{width: `${(d.value / highValue) * 100 }%`}} className=" bg-gradient-to-r from-indigo-500 to-sky-500 rounded-2xl p-2 h-1 flex items-center justify-end">
                         <p className="text-white text-[10px]">used {d.value} times</p>
                       </div>
                     </div>
