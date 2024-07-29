@@ -1,27 +1,38 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { ProjectType } from '../Admin/Project/interface';
+import axios from 'axios';
+import { API_MYPROJECT_ENDPOINTS } from '../../../util/apiConfig';
+import { useNavigate } from 'react-router-dom';
+import RegularLoading from '../../common/Loading/RegularLoading';
 
 function Portfolio() {
 
-  const [detile, setDetile] = useState(true);
+  const navigate = useNavigate();
 
-  const handleOpen = () => {    
-    setDetile(false);
-  }
 
-  const handleClose = () => {
-    const modal = document.getElementById('modal')
-    console.log(modal);
-    modal?.classList.remove('containerDetailPortfolio')
-    modal?.classList.add('alert-admin-content');
-    setTimeout(() => {
-      setDetile(true)
-      modal?.classList.add('containerDetailPortfolio')
-    }, 300);
-  }
+  const [project, setProject] = useState<[ProjectType] | undefined>()
+  const [error, setError] = useState("")
+  // const [queryParams, setQueryParams] = useState<QueryParams | null>(null);
 
-  const gambar = ['portfolio1.png', 'portfolio2.png', 'portfolio3.png', 'portfolio4.png'];
+  const getProject = async () => {
+    try {
+      const result = await axios.get(API_MYPROJECT_ENDPOINTS, {
+        params: {
+          status: 2,
+        }
+      });
+      setProject(result.data.data);
+    } catch (error) {
+      setError("Data is undifined")
+    }
+  } 
+
+  useEffect(() => {
+    getProject()
+  }, [])
+  
   return (
     <div className='container lg:px-28'>
       <div className='w-full px-4'>
@@ -32,43 +43,32 @@ function Portfolio() {
         </div>
       </div>
       <div className='w-full flex flex-wrap justify-center xl:w-10/12 xl:mx-auto '>
-        {gambar.map((g, i) => (
+      {error && (
+        <h1>{error}</h1>
+      )}
+      
+        {project && project.map<JSX.Element>((p: ProjectType , i: number) => (
 
-          <div className='p-4 md:w-1/2 ' key={i}>
-            <div className='overflow-hidden bg-white shadow-lg border-2 rounded-2xl hover:border-sky-400 transition duration-300 hover:cursor-pointer'>
-              <img src={`/img/${g}`} alt="portfolio" className={"w-full h-56 lg:h-60 object-cover"} />
+          <div className='p-4 md:w-1/2 w-full' key={i}>
+            <div onClick={() => {navigate('/'+p.id)}} className='overflow-hidden bg-white shadow-lg border-2 rounded-2xl hover:border-sky-400 transition duration-300 hover:cursor-pointer'>
+              <img src={`${p.image[0].secure_url}`} alt="portfolio" className={"w-full h-56 lg:h-60 object-cover"} />
               <div className='px-4 pb-4'>
-                <h3 className='font-semibold text-lg text-dark mt-5 mb-3 truncate '>Restfull API aplikasi boking hotel</h3>
-                <div className='flex gap-2'>
+                <h3 className='font-semibold text-lg text-dark mt-5 mb-2 truncate'>{p.title}</h3>
+                {/* <h4 className='text-main'>{p.category}</h4> */}
+                <div className='flex gap-1 flex-wrap'>
+                {p.tag.split(',').map((t: string, i2: number) => (
 
-                  <a href='#sas' onClick={handleOpen} className='bg-main py-2 px-4 inline-block rounded-xl text-sm font-medium text-white hover:opacity-80'>Detile</a>
-                  <a href='#sas' className='bg-slate-200 py-2 px-4 inline-block rounded-xl text-sm font-medium text-secondary hover:opacity-80'>Visit</a>
-                  {/* <p className='font-medium text-base text-secondary' >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo accusantium quasi, molestias aspernatur adipisci nisi.</p> */}
+                <span className='text-main py-0.5 px-2 rounded-lg bg-mddark text-xs' key={i2}>{t}</span>
+                ))}
                 </div>
               </div>
             </div>
           </div>
-        ))}
+        )) || (
+          <RegularLoading/>
+        )}
 
-        <div hidden={detile} className={`z-[1000] fixed inset-0 bg-opacity-25 ${detile? '' : 'bg-black'}`}>
-          <div  className={`static w-full flex items-center justify-center`}>
-            <div id='modal' className='w-full containerDetailPortfolio md:w-3/4 h-[90%] absolute bottom-0 bg-white border-2 rounded-t-2xl'>
-              
-                <div className='w-full border-b-2 px-4 py-3 flex flex-row justify-between items-center'>
-                  <h1 className='font-bold text-base capitalize'>Restfull API aplikasi boking hotel</h1>
-                  <button onClick={handleClose} className=''>❌</button>
-                </div>
-                <div className='p-4 w-full h-[90%] overflow-y-auto overscroll-y-contain'>
-                  <p className='mb-4'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur magnam vero perferendis nesciunt exercitationem temporibus, mollitia placeat reprehenderit deleniti eveniet fugiat tempore velit beatae neque doloribus architecto minus maxime sit!</p>
-                  <p className='mb-4'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos nulla voluptates veritatis esse repellat nobis voluptas magnam non fugiat impedit minus facere beatae vero reiciendis, repellendus doloremque quod laborum neque amet laboriosam aliquam velit aspernatur atque! Ab iusto eius quia!</p>
-                  <p className='mb-4'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos nulla voluptates veritatis esse repellat nobis voluptas magnam non fugiat impedit minus facere beatae vero reiciendis, repellendus doloremque quod laborum neque amet laboriosam aliquam velit aspernatur atque! Ab iusto eius quia!</p>
-                  <p className='mb-4'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos nulla voluptates veritatis esse repellat nobis voluptas magnam non fugiat impedit minus facere beatae vero reiciendis, repellendus doloremque quod laborum neque amet laboriosam aliquam velit aspernatur atque! Ab iusto eius quia!</p>
-                  <p className='mb-4'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos nulla voluptates veritatis esse repellat nobis voluptas magnam non fugiat impedit minus facere beatae vero reiciendis, repellendus doloremque quod laborum neque amet laboriosam aliquam velit aspernatur atque! Ab iusto eius quia!</p>
-                </div>
-              
-            </div>
-          </div>
-        </div>
+        
 
       </div>
     </div>

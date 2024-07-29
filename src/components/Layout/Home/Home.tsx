@@ -4,9 +4,9 @@ import HeroSection from './HeroSection';
 import AboutSection from './AboutSection';
 import Skills from './Skills';
 import Portfolio from './Portfolio';
-import Clients from './Clients';
+// import Clients from './Clients';
 import Blog from './Blog';
-import Contact from './Contact';
+// import Contact from './Contact';
 import Footer from './Footer';
 
 const Home: React.FC = () => {
@@ -25,15 +25,15 @@ const Home: React.FC = () => {
       <section id='portfolio' className='pt-36 pb-16 bg-slate-100'>
         <Portfolio/>
       </section>
-      <section id='clients' className='pt-36 pb-32 bg-dark'>
+      {/* <section id='clients' className='pt-36 pb-32 bg-dark'>
         <Clients/>
-      </section>
-      <section id='blog' className='pt-36 pb-32 bg-slate-100'>
+      </section> */}
+      <section id='blog' className='pt-36 pb-32 bg-white'>
         <Blog/>
       </section>
-      <section id='contact' className='pt-36 pb-32'>
+      {/* <section id='contact' className='pt-36 pb-32'>
         <Contact/>
-      </section>
+      </section> */}
       <footer id='footer' className='pt-24 pb-12 bg-dark'>
         <Footer/>
       </footer> 

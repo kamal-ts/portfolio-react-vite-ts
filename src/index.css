@@ -38,6 +38,8 @@ th {
     transition: 0.5s;
 }
 
+
+
 @keyframes top-to-bottom {
     0% {
         transform: translateY(0);

@@ -5,6 +5,7 @@ import axios from "axios";
 import { API_MYPROJECT_ENDPOINTS } from "../../../../util/apiConfig";
 import Paragraph from "../../../common/Skeleton/Paragraph";
 import SpeedMenu from "../../../common/SpeedMenu/SpeedMenu";
+import parse, { HTMLReactParserOptions } from "html-react-parser";
 
 const DetileProject: React.FC<{
   idProject: string;
@@ -36,6 +37,27 @@ const DetileProject: React.FC<{
     getSingleProduct();
   }, [idProject, tag, token]);
 
+  const addClassToListTags = (html: string) => {
+    const options: HTMLReactParserOptions = {
+      replace: (domNode) => {
+        if (domNode.type === 'tag' && domNode.name === 'ol') {
+          domNode.attribs.class = domNode.attribs.class
+            ? `${domNode.attribs.class} list-decimal`
+            : 'list-decimal';
+        }
+        if (domNode.type === 'tag' && domNode.name === 'ul') {
+          domNode.attribs.class = domNode.attribs.class
+            ? `${domNode.attribs.class} list-disc`
+            : 'list-disc';
+        }
+      }
+    };
+    return parse(html, options);
+  };
+
+  const processedValue = addClassToListTags(description);
+
+
   return (
     <div className="z-[9002] h-screen w-full bg-white dark:bg-dark dark:text-mddark absolute flex flex-col justify-normal">
       <div className="p-4 border-b dark:border-smdark flex items-center gap-4">
@@ -46,6 +68,7 @@ const DetileProject: React.FC<{
           <IoArrowBackCircle />
         </button>
         <h1 className="text-xl font-bold uppercase">Detile Product</h1>
+        <h2>{idProject}</h2>
       </div>
       <div className="w-full h-auto overflow-y-auto bg-white dark:bg-dark">
         {(product && (
@@ -68,13 +91,12 @@ const DetileProject: React.FC<{
                 Publis in {product?.createdAt}
               </h5>
 
-              <div
-                className="my-10 text-lg text-justify"
-                dangerouslySetInnerHTML={{ __html: description }}
-              />
+              <div className="my-10 text-lg">
+              {processedValue}
+              </div>
             </section>
 
-            <SpeedMenu/>
+            <SpeedMenu handleEvents={handleEvents} idProject={idProject} />
           </div>
         )) || (
           <div className="p-4 h-auto max-w-2xl mx-auto my-10">

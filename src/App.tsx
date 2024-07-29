@@ -20,6 +20,8 @@ import Sidebar2 from "./components/common/Sidebar/Sidebar2";
 import Modal from "./components/common/Modal/Modal";
 import ProductList from "./components/common/List/ProductList";
 // import Sidebar from "./components/common/Sidebar/Sidebar";
+import "react-quill/dist/quill.snow.css";
+import DetileProject from "./components/Layout/Home/DetileProject";
 
 const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
   const { token } = useAuth();
@@ -114,7 +116,7 @@ const App: React.FC = () => {
               </PrivateRoute>
             }
           />
-
+          <Route path="/:projectId" element={<DetileProject />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -125,11 +125,11 @@ const ListProject: React.FC<{
           <div className="flex gap-2 w-full lg:w-80">
             <RegularButton 
             onClick={() => setQueryParams({title: ""})} 
-            ><span className="flex justify-center">
-
-              <svg className="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"></path>
-						</svg>
+            >
+            <span className="flex justify-center">
+              <svg className="w-5 h-5 mr-2 -ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+              </svg>
               Refhres
             </span>
               </RegularButton>
@@ -137,7 +137,7 @@ const ListProject: React.FC<{
             onClick={() => handleEvents("create")} 
             >
               <span className="flex justify-center">
-              <svg className="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+              <svg className="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
               Add Project
               </span>
             </RegularButton>
@@ -170,14 +170,17 @@ const ListProject: React.FC<{
                   <tr key={index} className="border-t dark:border-secondary">
                     <td>{(paging?.current_page-1)*10+(index+1)}</td>
                     <td>{e.title}</td>
+                    <td className="flex ">
+                      <p className="max-w-40 overflow-hidden">{e.tag}</p>
+                      <p>{e.tag.length > 20? "..." : ""}</p>
+                    </td>
                     <td>{e.category}</td>
-                    <td>{e.tag}</td>
                     <td>{e.createdAt}</td>
                     <td className="px-6 whitespace-nowrap text-right text-xs font-bold">
                       <div className="flex gap-2">
                         <button
                           onClick={() => {
-                            handleEvents(e.id);
+                            handleEvents(e.id.toString());
                           }}
                           className="outline outline-2 outline-indigo-600 -outline-offset-1 hover:bg-indigo-600 text-indigo-600 hover:text-white px-2 py-1 rounded-2xl transition-colors "
                         >

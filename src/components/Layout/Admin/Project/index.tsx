@@ -13,7 +13,7 @@ import EditProject from "./EditProject";
 
 const Project = () => {
   // to conttrol project page
-  const [events, setevents] = useState("list");
+  const [events, setevents] = useState<string>("list");
   const { token } = useAuth();
   const [project, setProject] = useState<[ProjectType] | undefined>();
   const [error, setError] = useState("");
@@ -62,6 +62,11 @@ const Project = () => {
     setevents(e);
   };
 
+  const splitEvents = (e: string) => {
+    const result = e.split('/');
+    return result
+  }
+
   const location = useLocation();
   useEffect(() => {
     getProject();
@@ -88,8 +93,8 @@ const Project = () => {
           <CreateProject handleEvents={handleEvents} getProject={getProject} />
         )) ||
         (events === "update" && <UpdateProject />) ||
-        (events === "edit" && (
-          <EditProject handleEvents={handleEvents} getProject={getProject} />
+        (splitEvents(events)[0] === "edit" && (
+          <EditProject handleEvents={handleEvents} idProject={events.split("/")[1]} getProject={getProject} />
         )) ||
         (events && (
           <DetileProject

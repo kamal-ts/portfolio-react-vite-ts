@@ -7,6 +7,7 @@ import {
 import {  FaUserAlt, } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../Layout/Auth/AuthContext";
+import { Link } from "react-router-dom";
 
 const Sidebar: React.FC<{status: boolean}> = ({status}) => {
   const navigate = useNavigate();
@@ -14,11 +15,8 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
   interface Menu {
     title: string | null,
     icon: JSX.Element | null,
-    link: string | null,
+    link: string,
   }
-  const handleMenu = (e: Menu) => {
-    navigate(`${e.link}`);
-  };
 
   // to get path url
   const location = useLocation()
@@ -78,8 +76,8 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
               <h4 className="text-xs font-semibold text-mddark">MENU</h4>
             </div>
             {menu.map((m, index) => (
-              <div
-                onClick={() => handleMenu(m)}
+              <Link
+                to={m.link}
                 key={index}
                 className={`${
                   ( m.link === location.pathname) ? "bg-xldark dark:bg-smdark text-main" : ""
@@ -87,7 +85,7 @@ const Sidebar: React.FC<{status: boolean}> = ({status}) => {
               >
                 <span className="text-2xl">{m.icon}</span>
                 <span>{m.title}</span>
-              </div>
+              </Link>
             ))}
           </section>
         <section>
